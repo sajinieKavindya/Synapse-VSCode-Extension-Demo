@@ -3,8 +3,8 @@ This sample shows how to change the language mode to SynapseXML language. The sa
 
 ## Prerequisites
 - Download and install the latest version of VS Code from [here](https://code.visualstudio.com/download)
-- Install Node.js and npm
-- Install Yeoman and vscode extension generator
+- Node.js and npm
+- Yeoman and vscode extension generator
      - `npm install -g yo generator-code`
 
 ## Generate VS Code Extension:
