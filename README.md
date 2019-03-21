@@ -1,4 +1,4 @@
-# myfirstvscodeextension README
+# Synapse VS Code Extension Demo
 This sample shows how to change the language mode to SynapseXML language. The sample uses the VS Code Extension API.
 
 ## Prerequisites
