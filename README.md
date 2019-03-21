@@ -1,65 +1,109 @@
 # myfirstvscodeextension README
+This sample shows how to change the language mode to SynapseXML language. The sample uses the VS Code Extension API.
 
-This is the README for your extension "myfirstvscodeextension". After writing up a brief description, we recommend including the following sections.
+## Prerequisites
+- Download and install the latest version of VS Code from [here](https://code.visualstudio.com/download)
+- Install Node.js and npm
+- Install Yeoman and vscode extension generator
+     - `npm install -g yo generator-code`
 
-## Features
+## Generate VS Code Extension:
+- Navigate to the directory where you want to create your VS Code extension
+- Run the command and fill out a few fields
+    - `yo code`
+- Navigate to the extension folder and run the command
+    - `code .`
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## What's Inside
 
-For example if there is an image subfolder under your extension project workspace:
+following function will check tha namespace of the XML document, and will change the language mode to SynapseXML
 
-\!\[feature X\]\(images/feature-x.png\)
+```
+function setLanguageToSynapse(document: any): boolean {
+    let xmlData = document.getText();
+    let synapseNSPttern = new RegExp("xmlns=\"http:\/\/ws\.apache\.org\/ns\/synapse\"");
+    let response = synapseNSPttern.test(xmlData);
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+    if (response === true){
+        vscode.languages.setTextDocumentLanguage(document, "SynapseXml");
+        return true;
+    }
+    return false;
+}
+```
 
-## Requirements
+Following code snippet will show an information message if the Language mode succesfully changed to SynapseXML or an warning message if not.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```
+let changeLanguage = vscode.workspace.onDidOpenTextDocument((document)=>{
+        let changed = setLanguageToSynapse(document);
+        if(changed) {
+            vscode.window.showInformationMessage("Language Mode is changed to SynapseXML successfully");
+        }else {
+            vscode.window.showWarningMessage("Failed to change the language mode to SynapseXML");
+        }
+    });
+```
 
-## Extension Settings
+It is compulsory to update the package.json Extension Manifest file to support Language Mode change
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```
+"languages": [
+    {
+        "id": "SynapseXML",
+        "extensions": [".xml"]
+    }
+],
+```
+Note: Contribute a TextMate grammar to a language. You must provide the **SynapseXml** as the language this grammar applies to, the TextMate **scopeName** for the grammar and the file path. Make sure you add the grammar file in **/Synapse-VSCode-Extension-Demo/syntaxes/xml.tmLanguage.json** to your project
+```
+"grammars": [
+    {
+        "language": "SynapseXml",
+        "scopeName": "synapse.xml",
+        "path": "./syntaxes/xml.tmLanguage.json"
+    }
+]
+```
 
-For example:
+## VS Code API
 
-This extension contributes the following settings:
+### `vscode` module
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+- [`workspace.onDidOpenTextDocument`](https://code.visualstudio.com/api/references/vscode-api#workspace.onDidOpenTextDocument)
+- [`window.showInformationMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)
+- [`window.showWarningMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showWarningMessage)
+- [`languages.setTextDocumentLanguage`](https://code.visualstudio.com/api/references/vscode-api#languages.setTextDocumentLanguage)
 
-## Known Issues
+### Contribution Points
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
+- [`contributes.languages`](https://code.visualstudio.com/api/references/contribution-points#contributes.languages)
+- [`contributes.grammars`](https://code.visualstudio.com/api/references/contribution-points#contributes.grammars)
 
-## Release Notes
+### Activation Events
+- [`onCommand`](https://code.visualstudio.com/api/references/activation-events#onCommand)
 
-Users appreciate release notes as you update your extension.
+## Running the Sample
 
-### 1.0.0
+- Run `npm install` in terminal to install dependencies
+- Run the `Run Extension` target in the Debug View. This will:
+	- Start a task `npm: watch` to compile the code
+	- Run the extension in a new VS Code window
 
-Initial release of ...
+## Useful Keybindings
+| Description  | MacOS | Linux |
+| ------------- | ------------- | ------------- |
+| Show Command Palette  | Command+Shift+P  | Ctrl+Shift+P  |
+| Quick Open/ Goto file  | Command+P  | Ctrl+P  |
+| New window/instance  | Command+Shift+N  | Ctrl+Shift+N  |
+| Close window  | Command+W  | Ctrl+W |
+| Open file  | Command+O  | Ctrl+O  |
+| New file | Command+N  | Ctrl+N  |
+| Debug: Start/continue | F5  | F5  |
+| Debug:Toggle Breakpoint | F9  | F9  |
 
-### 1.0.1
 
-Fixed issue #.
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+  
