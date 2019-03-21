@@ -16,13 +16,13 @@ This sample shows how to change the language mode to SynapseXML language. The sa
 
 ## What's Inside
 
-following function will check tha namespace of the XML document, and will change the language mode to SynapseXML
+Following function will check tha namespace of the XML document, and will change the language mode to SynapseXML
 
 ```
 function setLanguageToSynapse(document: any): boolean {
     let xmlData = document.getText();
-    let synapseNSPttern = new RegExp("xmlns=\"http:\/\/ws\.apache\.org\/ns\/synapse\"");
-    let response = synapseNSPttern.test(xmlData);
+    let synapseNSPattern = new RegExp("xmlns=\"http:\/\/ws\.apache\.org\/ns\/synapse\"");
+    let response = synapseNSPattern.test(xmlData);
 
     if (response === true){
         vscode.languages.setTextDocumentLanguage(document, "SynapseXml");
@@ -44,8 +44,9 @@ let changeLanguage = vscode.workspace.onDidOpenTextDocument((document)=>{
         }
     });
 ```
+It is Mandatory to update the package.json Extension Manifest file to as follows
 
-It is compulsory to update the package.json Extension Manifest file to support Language Mode change
+Contribute definition of the SynapseXml language so that this will enrich the knowledge VS Code has about the SynapseXml language.
 
 ```
 "languages": [
@@ -55,7 +56,7 @@ It is compulsory to update the package.json Extension Manifest file to support L
     }
 ],
 ```
-Note: Contribute a TextMate grammar to a language. You must provide the **SynapseXml** as the language this grammar applies to, the TextMate **scopeName** for the grammar and the file path. Make sure you add the grammar file in **/Synapse-VSCode-Extension-Demo/syntaxes/xml.tmLanguage.json** to your project
+Note: Contribute a TextMate grammar to a language as follows. You must provide the **SynapseXml** as the language this grammar applies to, the TextMate **scopeName** for the grammar and the file path. You can find the XML grammar file in **/Synapse-VSCode-Extension-Demo/syntaxes/xml.tmLanguage.json**. Make sure you add this grammar file to the relevanr path in your project
 ```
 "grammars": [
     {
